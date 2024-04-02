@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SharesService } from './shares.service';
-import { CreateShareDto } from './dto/create-share.dto';
-import { UpdateShareDto } from './dto/update-share.dto';
+import { SharesService } from '../services/shares.service';
+import { CreateShareDto } from '../dto/create-share.dto';
+import { UpdateShareDto } from '../dto/update-share.dto';
 
 @Controller('shares')
 export class SharesController {

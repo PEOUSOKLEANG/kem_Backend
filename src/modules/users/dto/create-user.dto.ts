@@ -1,3 +1,5 @@
+import { IsNotEmpty, IsString,MinLength } from "class-validator";
+
 export enum GenderDto{
     Male='male',
     Female='female',
@@ -5,13 +7,27 @@ export enum GenderDto{
 
 }
 export class CreateUserDto {
+    @IsNotEmpty()
+    @MinLength(3)
+    @IsString()
     username:string;
+
+    @MinLength(8)
+    phone_number:string;
+    @IsNotEmpty()
+    @MinLength(3)
     firstname:string;
-    lastname:string 
+    @IsNotEmpty()
+    @MinLength(3)
+    lastname:string;
+
     dob:Date;
-    location:string
-    password:string
-    gender:GenderDto
+    location:string;
+
+    @MinLength(8)
+    password:string;
+    
+    gender:GenderDto;
 
 
 }

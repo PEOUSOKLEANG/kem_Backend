@@ -2,7 +2,8 @@ import { share } from "rxjs";
 import { ColdObservable } from "rxjs/internal/testing/ColdObservable";
 import { Post } from "src/modules/posts/entities/post.entity";
 import { Share } from "src/modules/shares/entities/share.entity";
-import {  Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {  Column, Entity, OneToMany, PrimaryGeneratedColumn,BeforeInsert, BeforeUpdate } from "typeorm";
+import * as bcrypt from 'bcrypt';
 
 
 export enum Gender{
@@ -47,6 +48,19 @@ export class User {
     //post 
     @OneToMany(()=>Post,(post)=>post.user)
     post:Post[];
+
+    //before insert 
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword(): Promise<void> {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+
+  
+
+    async validatePassword(password: string): Promise<boolean> {
+        return bcrypt.compare(password, this.password);
+    }
 
 
 }

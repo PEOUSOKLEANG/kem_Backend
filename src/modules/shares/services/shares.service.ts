@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateShareDto } from './dto/create-share.dto';
-import { UpdateShareDto } from './dto/update-share.dto';
+import { CreateShareDto } from '../dto/create-share.dto';
+import { UpdateShareDto } from '../dto/update-share.dto';
 
 @Injectable()
 export class SharesService {
