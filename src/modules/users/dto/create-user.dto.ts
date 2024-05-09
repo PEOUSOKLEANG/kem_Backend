@@ -4,7 +4,6 @@ export enum GenderDto{
     Male='male',
     Female='female',
     Other='other'
-
 }
 export class CreateUserDto {
     @IsNotEmpty()
@@ -26,6 +25,8 @@ export class CreateUserDto {
 
     @MinLength(8)
     password:string;
+
+    email:string;
     
     gender:GenderDto;
 

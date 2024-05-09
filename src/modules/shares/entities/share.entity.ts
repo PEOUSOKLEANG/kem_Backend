@@ -9,8 +9,11 @@ export class Share {
 
     @Column({type:'date'})
     date_shared:Date;
+    
+    @Column({nullable:true})
+    caption:string; 
 
-    //userid
+    //userid people who share post 
     @ManyToOne(()=> User, (user)=>user.share)
     @JoinColumn({name:'user_id'})
     user:User;

@@ -7,28 +7,29 @@ import { UpdateShareDto } from '../dto/update-share.dto';
 export class SharesController {
   constructor(private readonly sharesService: SharesService) {}
 
-  @Post()
-  create(@Body() createShareDto: CreateShareDto) {
-    return this.sharesService.create(createShareDto);
+  @Post('/post')
+  async sharePost(@Body() sharePost:CreateShareDto){
+    return await this.sharesService.sharePost(sharePost);
+
   }
 
-  @Get()
-  findAll() {
-    return this.sharesService.findAll();
+  @Patch('/edit/:shareId')
+  async editPost(
+    @Param('shareId') shareId: number,
+    @Body() updateShareDto: UpdateShareDto ){
+      console.log(shareId , updateShareDto);
+      
+    return await this.sharesService.editSharePost(shareId, updateShareDto) 
+
+  } 
+
+  @Delete('delete/:shareId/:user_id')
+  async deleteShare(
+    @Param('shareId') shareId:number,
+    @Param('user_id') user_id: number ){
+      console.log(shareId , user_id);
+      
+    return await this.sharesService.deleteShare(shareId,user_id)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sharesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShareDto: UpdateShareDto) {
-    return this.sharesService.update(+id, updateShareDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sharesService.remove(+id);
-  }
 }

@@ -1,4 +1,5 @@
 import { Post } from "src/modules/posts/entities/post.entity";
+import { User } from "src/modules/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:'feedbacks'})
@@ -8,14 +9,19 @@ export class Feedback {
     id:number;
 
     @Column()
-    comment:string;
+    feedback:string;
 
-    @Column()
+    @Column({nullable:true})
     image:string;
     //postid
     @ManyToOne(()=>Post,(post)=>post.feedback)
     @JoinColumn({name:'post_id'})
     post:Post;
+
+    // people given feedback
+    @ManyToOne(()=>User, (user)=>user.feedback)
+    @JoinColumn({name:'user_id'})
+    user:User;
     
-    //userid
+  
 }

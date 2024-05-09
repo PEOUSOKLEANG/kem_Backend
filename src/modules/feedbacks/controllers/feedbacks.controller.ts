@@ -7,28 +7,18 @@ import { UpdateFeedbackDto } from '../dto/update-feedback.dto';
 export class FeedbacksController {
   constructor(private readonly feedbacksService: FeedbacksService) {}
 
-  @Post()
-  create(@Body() createFeedbackDto: CreateFeedbackDto) {
-    return this.feedbacksService.create(createFeedbackDto);
+  @Post('create')
+  async createFeedback(@Body() createFeedbackDto:CreateFeedbackDto){
+    return await this.feedbacksService.createFeedback(createFeedbackDto);
+
   }
 
-  @Get()
-  findAll() {
-    return this.feedbacksService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.feedbacksService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFeedbackDto: UpdateFeedbackDto) {
-    return this.feedbacksService.update(+id, updateFeedbackDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.feedbacksService.remove(+id);
-  }
-}
+  //user_id , post_id , feedback_id the same as delete 
+  @Patch('update/:feeback_id')
+  async updateFeedback(
+    @Param('feedback_id') feedback_id:number,
+    @Body() updateFeedbackDto:UpdateFeedbackDto
+){
+    return await this.feedbacksService.updateFeedback(feedback_id , updateFeedbackDto) 
+   }
+} 

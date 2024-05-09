@@ -8,6 +8,8 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { SharesModule } from './modules/shares/shares.module';
 import { UsersModule } from './modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './modules/auth/auth.module';
+import { ReportsService } from './modules/reports/services/reports.service';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal:true}),TypeOrmModule.forRoot({
@@ -30,7 +32,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize:true
 
-  }), PostsModule, FeedbacksModule, ReportsModule, SharesModule, UsersModule],
+  }), PostsModule, FeedbacksModule, ReportsModule, SharesModule, UsersModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

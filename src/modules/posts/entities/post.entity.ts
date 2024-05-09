@@ -1,4 +1,5 @@
 import { Feedback } from "src/modules/feedbacks/entities/feedback.entity";
+import { Report } from "src/modules/reports/entities/report.entity";
 import { Share } from "src/modules/shares/entities/share.entity";
 import { User } from "src/modules/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -7,7 +8,6 @@ export enum KeyPost{
     Knowledge='knowledge',
     Farmer = 'farmer',
     Invention = 'invention',
-    
 
 }
 
@@ -16,23 +16,23 @@ export class Post {
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column({type:'enum',enum:KeyPost , default:KeyPost.Knowledge})
+    @Column({nullable:false,type:'enum',enum:KeyPost , default:KeyPost.Knowledge})
     key_post:string;
 
 
     @Column({ type: 'date', nullable: true, default: () => 'CURRENT_DATE' })
     post_date: Date;
 
-    @Column()
+    @Column({nullable:true})
     location:string;
 
-    @Column()
+    @Column({nullable:true})
     post_file:string;
 
-    @UpdateDateColumn()
-    update_date:string;
+    @UpdateDateColumn({nullable:true})
+    update_date:Date;
 
-    @Column()
+    @Column({nullable:true})
     description:string;
 
     //share
@@ -47,6 +47,10 @@ export class Post {
     //feedback
     @OneToMany(()=>Feedback,(feedback)=>feedback.post)
     feedback:Feedback[];
+
+    //Report
+    @OneToMany(()=>Report, (report)=>report.user)
+    report:Report[];
     
 
 

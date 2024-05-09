@@ -2,8 +2,13 @@ import { share } from "rxjs";
 import { ColdObservable } from "rxjs/internal/testing/ColdObservable";
 import { Post } from "src/modules/posts/entities/post.entity";
 import { Share } from "src/modules/shares/entities/share.entity";
-import {  Column, Entity, OneToMany, PrimaryGeneratedColumn,BeforeInsert, BeforeUpdate } from "typeorm";
+import {  Column, Entity, OneToMany, PrimaryGeneratedColumn,BeforeInsert, BeforeUpdate, ManyToOne, JoinColumn, OneToOne } from "typeorm";
 import * as bcrypt from 'bcrypt';
+import { Report } from "src/modules/reports/entities/report.entity";
+import { Feedback } from "src/modules/feedbacks/entities/feedback.entity";
+import { Otp } from "src/modules/auth/entities/otp.entity";
+import { argon2d } from "argon2";
+import { Auth } from "src/modules/auth/entities/auth.entity";
 
 
 export enum Gender{
@@ -17,29 +22,35 @@ export enum Gender{
 export class User {
     @PrimaryGeneratedColumn()
     id:number;
-    @Column()
+
+    @Column({nullable:false})
     username:string;
+
     @Column({type:'enum',enum:Gender, default:Gender.Other})
     gender:string;
     
-    @Column()
+    @Column({nullable:false})
     phone_number:string;
 
-    @Column()
+    //
+    @Column({nullable:true,})
+    email:string;
+
+    @Column({nullable:false })
     password:string;
 
-    @Column()
+    @Column({nullable:true})
     firstname:string;
-    @Column()
+    @Column({nullable:true})
     lastname:string;
 
     @Column({type:'date'})
     dob: Date;
 
-    @Column()
+    @Column({nullable:true})
     location:string;
 
-    @Column()
+    @Column({nullable:true})
     profile_image:string;
     //share
     @OneToMany(()=> Share, (share)=>share.user)
@@ -49,11 +60,38 @@ export class User {
     @OneToMany(()=>Post,(post)=>post.user)
     post:Post[];
 
+    //report
+    @OneToMany(()=>Report, report=>report.user)
+    report:Report[];
+    //feedback 
+    @ManyToOne(()=>Feedback,(feedback)=>feedback.user)
+    @JoinColumn({name:'feedback_id'})
+    feedback:Feedback;
+
+
+    //Auth
+    @OneToOne(()=>Auth ,(auth)=>auth.user)
+    @JoinColumn({name:'auth'})
+    auth:Auth;
+    // @Column({nullable:true})
+    // refresh_token:string;
+
+    //Otp
+    // @OneToOne(()=>Otp,(otp)=>otp.user)
+    // @JoinColumn({name:'otp'})
+    // otp:Otp;
+
+    
+
+    
+    
+
     //before insert 
     @BeforeInsert()
     @BeforeUpdate()
     async hashPassword(): Promise<void> {
         this.password = await bcrypt.hash(this.password, 10);
+        // this.password =await argon2d.hash(this.password)
     }
 
   

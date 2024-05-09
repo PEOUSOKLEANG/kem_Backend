@@ -1,26 +1,84 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReportDto } from '../dto/create-report.dto';
-import { UpdateReportDto } from '../dto/update-report.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Report } from '../entities/report.entity';
+import { Post } from 'src/modules/posts/entities/post.entity';
+import { User } from 'src/modules/users/entities/user.entity';
 
 @Injectable()
 export class ReportsService {
-  create(createReportDto: CreateReportDto) {
-    return 'This action adds a new report';
+  constructor(@InjectRepository(Report) private reportRepository:Repository<Report>,
+    @InjectRepository(Post) private postRepository:Repository<Post>,
+    @InjectRepository(User) private userRepository:Repository<User>
+
+){}
+  async CreateReport (createReportDto:CreateReportDto){
+    const existedPost = this.postBoolean(createReportDto.post_id, createReportDto.reporter_id);
+    try {
+      if(existedPost) {
+        const report = new Report()
+        report.report_status = createReportDto.report_status
+        report.user = await this.userRepository.findOne({where:{id:createReportDto.reporter_id}})
+        report.post =await this.postRepository.findOne({where:{id:createReportDto.post_id}})
+        await this.reportRepository.save(report);
+      }
+     
+     if(!existedPost) throw Error;
+    } catch (error) {
+      throw new HttpException({
+        status:HttpStatus.INTERNAL_SERVER_ERROR,
+        message:'something wnet worng.'
+      },HttpStatus.INTERNAL_SERVER_ERROR) 
+    }   
+  }
+  async postBoolean(reporter_id:any , post_id:any):Promise<Boolean>{
+    const isUser = await this.userRepository.findOne({where:{id:reporter_id}})
+    if(!isUser) return false;
+    if(isUser){
+      const isPost = await this.postRepository.findOne({where:{id:post_id}})
+      if(isPost) return true;
+      if(!isPost) return false;
+    }return true;
   }
 
-  findAll() {
-    return `This action returns all reports`;
+
+  //report
+  async reportPost(createReportDto:CreateReportDto){
+    //any people who see can report 
+    // const reporter = await this.userRepository.findOne({where:{id:createReportDto.reporter_id}});
+
+    const post = await this.postRepository.findOne({where:{id:createReportDto.post_id}});
+    if(!post) throw new NotFoundException('Post not found');
+
+    
+    const report = new Report();
+    report.user = createReportDto.reporter_id
+    report.report_status = createReportDto.report_status
+
+    await this.reportRepository.save(report);
+    return{
+      message:'you reported the post ',  
+      statusCode:HttpStatus.OK
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} report`;
-  }
 
-  update(id: number, updateReportDto: UpdateReportDto) {
-    return `This action updates a #${id} report`;
+  //countPost when loop count in database 
+  //post_id to find and delete in datebase  
+  //report status count  when got delete post , reportStatusCount is the type of report almost 
+ async deleteByReport(reportStatusCount:string, countPost:number, postId: number ){
+  if(countPost === 30){
+    await this.postRepository.delete(postId);
+    return{
+      message:'Your post is reported and reach to delele',
+      reportStatus:reportStatusCount
+    }
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} report`;
+  else if(countPost === 20 ){
+    return{
+      message: 'Something went wrong with post, Please check your post, key_post'
+    }
   }
+ } 
 }
