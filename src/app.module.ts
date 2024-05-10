@@ -10,6 +10,7 @@ import { UsersModule } from './modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { ReportsService } from './modules/reports/services/reports.service';
+import { ChatsModule } from './modules/chats/chats.module';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal:true}),TypeOrmModule.forRoot({
@@ -32,7 +33,7 @@ import { ReportsService } from './modules/reports/services/reports.service';
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize:true
 
-  }), PostsModule, FeedbacksModule, ReportsModule, SharesModule, UsersModule, AuthModule],
+  }), PostsModule, FeedbacksModule, ReportsModule, SharesModule, UsersModule, AuthModule, ChatsModule],
   controllers: [AppController],
   providers: [AppService],
 })
