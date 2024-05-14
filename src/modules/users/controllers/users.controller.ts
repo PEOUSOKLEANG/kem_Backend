@@ -13,8 +13,9 @@ export class UsersController {
   //   return await this.usersService.registerNewUser(registerDto);
   // }
 
-  @Patch()
-  async updateUserInfo(@Body() updateUserInfo:UpdateUserInfo, id:number){
+  @Patch('/update/:id')
+  async updateUserInfo(@Param('id') id:number , @Body() updateUserInfo:UpdateUserInfo){
+    // console.log(updateUserInfo,id);
     return await this.usersService.updateInformation(id,updateUserInfo);
   }
 

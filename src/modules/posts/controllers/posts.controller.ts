@@ -7,11 +7,11 @@ import { UpdatePostDto } from '../dto/update-post.dto';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post('create')
+  @Post('post/create')
   async createPost(@Body() createPostDto:CreatePostDto){
-    return await this.postsService.createPost(createPostDto);
+    console.log(createPostDto);
+    return await this.postsService.createPost(createPostDto)
   }
-
   // @Patch('update')
   // async updatePost(@Body() updatePostDto:UpdatePostDto,id:number){
   //   return await this.postsService.updatePost( id ,updatePostDto)

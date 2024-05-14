@@ -8,6 +8,7 @@ import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
 import { UsersModule } from '../users/users.module';
 import { User } from '../users/entities/user.entity';
 import { Auth } from './entities/auth.entity';
+import { AuthsController } from './controllers/auths.controller';
 
 
 @Module({
@@ -16,7 +17,7 @@ import { Auth } from './entities/auth.entity';
     JwtModule.register({
       // global:true
     }),UsersModule],
-  controllers: [],
+  controllers: [AuthsController],
   providers: [AuthService,AccessTokenStrategy, RefreshTokenStrategy],
   exports:[AuthService]
 })

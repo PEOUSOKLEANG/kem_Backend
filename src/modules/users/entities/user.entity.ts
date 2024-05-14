@@ -9,6 +9,7 @@ import { Feedback } from "src/modules/feedbacks/entities/feedback.entity";
 import { Otp } from "src/modules/auth/entities/otp.entity";
 import { argon2d } from "argon2";
 import { Auth } from "src/modules/auth/entities/auth.entity";
+import { Chat } from "src/modules/chats/entities/chat.entity";
 
 
 export enum Gender{
@@ -17,7 +18,11 @@ export enum Gender{
     Other = 'other'
 
 }
-
+export enum Role{
+    Admin = 'admin',
+    User = 'user',
+    Guess= 'guess'
+}
 @Entity({name:'users'})
 export class User {
     @PrimaryGeneratedColumn()
@@ -35,6 +40,9 @@ export class User {
     //
     @Column({nullable:true,})
     email:string;
+
+    @Column({nullable:false , type:'enum', enum:Role})
+    role:string;
 
     @Column({nullable:false })
     password:string;
@@ -69,6 +77,10 @@ export class User {
     feedback:Feedback;
 
 
+    @Column({unique:true})
+    private_key:string;
+
+
     //Auth
     @OneToOne(()=>Auth ,(auth)=>auth.user)
     @JoinColumn({name:'auth'})
@@ -76,10 +88,23 @@ export class User {
     // @Column({nullable:true})
     // refresh_token:string;
 
+
+    @OneToMany(()=>Chat,(chat)=>chat.sender)
+    sender:Chat[];
+
+    @OneToMany(()=>Chat ,(chat)=>chat.receiver)
+    receiver:Chat[]
+
     //Otp
     // @OneToOne(()=>Otp,(otp)=>otp.user)
     // @JoinColumn({name:'otp'})
     // otp:Otp;
+
+
+    @BeforeInsert()
+    async hashPrivatKey(): Promise<void>{
+        this.private_key = await bcrypt.hash(this.private_key,8)
+    }
 
     
 

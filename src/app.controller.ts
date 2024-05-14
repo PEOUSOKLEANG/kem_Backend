@@ -46,11 +46,11 @@ export class AppController {
     return await this.authsService.signIn(signInDto);
   }
   //logout 
-  @UseGuards(AccessTokenGuard)
-  @Post('logout')
-  async logout( @Req() req,refreshToken:null ){
-    return await this.authsService.logout(req.user_id, refreshToken)
-  }
+  // @UseGuards(AccessTokenGuard)
+  // @Post('logout')
+  // async logout( @Req() req,refreshToken:null ){
+  //   return await this.authsService.logout(req.user_id, refreshToken)
+  // }
 
 
 
@@ -58,7 +58,7 @@ export class AppController {
   //update imformation :working
   @Patch('/user/update/:id')
   async updateUserInfo(@Param('id') id:number , @Body() updateUserInfo:UpdateUserInfo){
-    console.log(updateUserInfo,id);
+    // console.log(updateUserInfo,id);
     return await this.usersService.updateInformation(id,updateUserInfo);
   }
 

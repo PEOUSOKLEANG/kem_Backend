@@ -5,9 +5,10 @@ import { User } from "src/modules/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export enum KeyPost{
-    Knowledge='knowledge',
     Farmer = 'farmer',
     Invention = 'invention',
+    Plantfruit ='plantfruit',
+    Gardener = 'gardener'
 
 }
 
@@ -16,7 +17,7 @@ export class Post {
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column({nullable:false,type:'enum',enum:KeyPost , default:KeyPost.Knowledge})
+    @Column({nullable:false,type:'enum',enum:KeyPost , default:KeyPost.Farmer})
     key_post:string;
 
 

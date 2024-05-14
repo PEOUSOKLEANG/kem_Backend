@@ -191,9 +191,9 @@ export class AuthService {
   }
   
   //log out
-  async logout(user_id:number, refreshtoken:string){
+  async logout(user_id:number ){
     // return await this.authRepository.update(user_id,{refresh_token:null})
-    await this.UpdateRefreshToken(user_id,refreshtoken)
+    await this.authRepository.update(user_id,{refresh_token:null})
 
   }
 

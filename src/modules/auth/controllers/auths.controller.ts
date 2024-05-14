@@ -7,7 +7,15 @@ import { AccessTokenGuard } from "src/common/guards/accessToken.guard";
 @Controller('auth')
 export class AuthsController{
     constructor(private readonly authsService:AuthService ) {}
+  
+    //logout 
+  @UseGuards(AccessTokenGuard)
+  @Post('logout')
+  async logout( @Req() req  ){
+    console.log("user:",req);
     
+    return await this.authsService.logout(req.user.sub)
+  }
     
   @Post('register')
   async register(@Body() registerDto:CreateUserDto){
@@ -21,10 +29,5 @@ export class AuthsController{
     console.log(signInDto);
     return await this.authsService.signIn(signInDto);
   }
-  //logout 
-  @UseGuards(AccessTokenGuard)
-  @Post('logout')
-  async logout( @Req() req,refreshToken:null ){
-    return await this.authsService.logout(req.user_id, refreshToken)
-  }
+  
 }

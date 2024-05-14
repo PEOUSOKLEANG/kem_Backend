@@ -49,15 +49,18 @@ export class FeedbacksService {
   
   async updateFeedback(feedback_id:number,updateFeedbackDto:UpdateFeedbackDto){
 
+    console.log(feedback_id,updateFeedbackDto);
+    
     const isPost = await this.postRepository.findOne({where:{id:updateFeedbackDto.post_id}})
     if(!isPost) throw new NotFoundException('Post not found'); 
 
     const isUser = await this.userRepository.findOne({where:{id:updateFeedbackDto.given_feedback}});
     if (!isUser) throw new NotFoundException('User not found');
 
-    const updateFeedback = await this.feedbackRepository.findOne({where:{
-      id:feedback_id
-    }})
+    const updateFeedback = await this.feedbackRepository.findOne({
+        where:{id:feedback_id},
+        relations:{post:true , user:true}
+    })
     if(!updateFeedback) throw new NotFoundException('Feedback not found');
     // validate post and feedback  (post > feedback > user)
     if(updateFeedback.post.id !== isPost.id) throw new BadRequestException('post is not matched');
@@ -100,7 +103,8 @@ export class FeedbacksService {
     if(!isPost) throw new NotFoundException('Post not found'); 
 
     const deleteFeedback = await this.feedbackRepository.findOne({
-      where:{id:deleteFeedbackDto.feedback_id}
+      where:{id:deleteFeedbackDto.feedback_id},
+      relations:{post:true,user:true}
     })
     if(!deleteFeedback) throw new NotFoundException('Feedback not found');
 

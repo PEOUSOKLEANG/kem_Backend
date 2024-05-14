@@ -1,6 +1,8 @@
 export enum KEY_POST {
     Farmer = 'farmer',
-    Invention = 'invention'
+    Invention = 'invention',
+    Plantfruit ='plantfruit',
+    Gardener = 'gardener'
 }
 export class CreatePostDto {
     user:number;
