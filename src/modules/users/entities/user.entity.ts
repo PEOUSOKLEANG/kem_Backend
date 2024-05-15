@@ -60,6 +60,13 @@ export class User {
 
     @Column({nullable:true})
     profile_image:string;
+
+    @Column({unique:true})
+    private_key:string;
+
+    @Column({type:'date'})
+    create_at:Date;
+
     //share
     @OneToMany(()=> Share, (share)=>share.user)
     share:Share[];
@@ -67,6 +74,7 @@ export class User {
     //post 
     @OneToMany(()=>Post,(post)=>post.user)
     post:Post[];
+    
 
     //report
     @OneToMany(()=>Report, report=>report.user)
@@ -77,9 +85,7 @@ export class User {
     feedback:Feedback;
 
 
-    @Column({unique:true})
-    private_key:string;
-
+  
 
     //Auth
     @OneToOne(()=>Auth ,(auth)=>auth.user)

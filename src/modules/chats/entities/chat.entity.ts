@@ -9,11 +9,17 @@ export class Chat {
     @Column()
     message:string;
 
+    @Column()
+    key:string;
+
     @ManyToOne(()=>User , (user)=>user.sender)
     sender:User;
 
     @ManyToOne(()=>User , (user)=>user.receiver)
     receiver:User;
+
+
+    
 
 
 }
