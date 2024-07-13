@@ -6,9 +6,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/modules/users/entities/user.entity';
 import { GeneralRespone } from 'src/modules/types/generalRespone';
-import { PostRespone } from 'src/modules/types/postRespone';
-import { throwError } from 'rxjs';
-import { log } from 'console';
 
 @Injectable()
 export class PostsService {
@@ -176,6 +173,11 @@ export class PostsService {
 
 //  random post 
 
+
+// get all post 
+async getPost(){
+  return  await this.postRepository.find();
+}
 
    
 

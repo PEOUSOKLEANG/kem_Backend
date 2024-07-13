@@ -13,7 +13,7 @@ import { ChangePassword } from '../dto/chanegpassword.dto';
 export class UsersService {
     constructor(@InjectRepository(User) private userRepository:Repository<User>){}
 
-
+// existed User  
 async existedUser (email:string ,username:string,phone_number:string ){
     const isemail = await this.userRepository.findOne({where:{email:email}});
     const isPhoneNumber = await this.userRepository.findOne({where:{phone_number:phone_number}});
@@ -137,6 +137,15 @@ async changePassword(userId: number, changePasswordDto: ChangePassword){
         const isUser = await this.userRepository.findOne({where:{id:id}})
         console.log(id,updateUserInfoDto);
         
+        const existsUsername = await this.userRepository.findOne({where:{username:updateUserInfoDto.username}});
+        if (existsUsername) throw new BadRequestException('username already exited');
+
+        const email = await  this.userRepository.findOne({where:{email:updateUserInfoDto.email}});
+        if(email) throw new BadRequestException('email already exists');
+
+        const phone_number = await this.userRepository.findOne({where:{phone_number:updateUserInfoDto.phone_number}});
+        if(phone_number) throw new BadRequestException('phone number already exited');
+        
         try {
             if(isUser){
                 // const updateUserInform = await this.userRepository.findOne({where:{id:id}})
@@ -146,10 +155,14 @@ async changePassword(userId: number, changePasswordDto: ChangePassword){
                 isUser.dob = updateUserInfoDto.dob
                 isUser.gender = updateUserInfoDto.gender
                 isUser.location = updateUserInfoDto.location
+                isUser.email = updateUserInfoDto.email
+                isUser.phone_number = updateUserInfoDto.phone_number
+                isUser.role = updateUserInfoDto.role
 
                 console.log(isUser);
 
                 await this.userRepository.save(isUser);
+
                 
             return {
                 message:'successful',

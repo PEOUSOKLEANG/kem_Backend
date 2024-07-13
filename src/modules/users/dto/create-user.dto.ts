@@ -1,10 +1,12 @@
 import { IsNotEmpty, IsString,MinLength } from "class-validator";
+import { Role } from "src/common/enum/role.enum";
 
 export enum GenderDto{
     Male='male',
     Female='female',
     Other='other'
 }
+
 export class CreateUserDto {
     @IsNotEmpty()
     @MinLength(3)
@@ -13,6 +15,7 @@ export class CreateUserDto {
 
     @MinLength(8)
     phone_number:string;
+    
     @IsNotEmpty()
     @MinLength(3)
     firstname:string;
@@ -29,6 +32,8 @@ export class CreateUserDto {
     email:string;
     
     gender:GenderDto;
+
+    role:Role;
 
 
 }

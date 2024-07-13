@@ -10,6 +10,7 @@ import { Otp } from "src/modules/auth/entities/otp.entity";
 import { argon2d } from "argon2";
 import { Auth } from "src/modules/auth/entities/auth.entity";
 import { Chat } from "src/modules/chats/entities/chat.entity";
+import { ProImage } from "src/modules/profileimage/entities/profileimage.entity";
 
 
 export enum Gender{
@@ -52,22 +53,29 @@ export class User {
     @Column({nullable:true})
     lastname:string;
 
-    @Column({type:'date'})
+    @Column({type:'date',nullable:true})
     dob: Date;
 
     @Column({nullable:true})
     location:string;
 
-    @Column({nullable:true})
-    profile_image:string;
+    
 
-    @Column({unique:true})
+    @Column({unique:true , nullable:true})
     private_key:string;
 
-    @Column({type:'date'})
+    @Column({nullable:true ,type:'date'})
     create_at:Date;
 
-    //share
+    //image Profile
+    @OneToMany(()=>ProImage, (profile_image)=>profile_image.user )
+    profile_image:ProImage[];
+
+    // @Column({nullable:true})
+    // profile_image:string;
+    // @OneToMany(()=>Image ,(image)=>image.user_profile_id)
+    // profile_image:Image[];
+    // //share
     @OneToMany(()=> Share, (share)=>share.user)
     share:Share[];
 
@@ -107,10 +115,10 @@ export class User {
     // otp:Otp;
 
 
-    @BeforeInsert()
-    async hashPrivatKey(): Promise<void>{
-        this.private_key = await bcrypt.hash(this.private_key,8)
-    }
+    // @BeforeInsert()
+    // async hashPrivatKey(): Promise<void>{
+    //     this.private_key = await bcrypt.hash(this.private_key,8)
+    // }
 
     
 

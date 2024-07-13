@@ -15,7 +15,7 @@ import { FeedbacksService } from './modules/feedbacks/services/feedbacks.service
 import { CreateFeedbackDto } from './modules/feedbacks/dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './modules/feedbacks/dto/update-feedback.dto';
 import { DeleteFeedbackDto } from './modules/feedbacks/dto/delete-validate-feedback.dto';
-import { AuthService } from './modules/auth/auth.service';
+import { AuthService } from './modules/auth/services/auth.service';
 import { SignInDto } from './modules/auth/dto/signin.dto';
 import { AccessTokenGuard } from './common/guards/accessToken.guard';
 

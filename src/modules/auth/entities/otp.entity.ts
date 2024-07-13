@@ -9,6 +9,8 @@ export class Otp{
     @Column()
     otp:string;
 
+
+    // that can't be email and phone__number
     @Column()
     username:string;
 

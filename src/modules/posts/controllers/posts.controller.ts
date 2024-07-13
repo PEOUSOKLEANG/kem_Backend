@@ -12,11 +12,7 @@ export class PostsController {
     console.log(createPostDto);
     return await this.postsService.createPost(createPostDto)
   }
-  // @Patch('update')
-  // async updatePost(@Body() updatePostDto:UpdatePostDto,id:number){
-  //   return await this.postsService.updatePost( id ,updatePostDto)
 
-  // }
   @Delete('delete/:user_id/:post_id')
   async deletePost(
     @Param('user_id') user_id: number,

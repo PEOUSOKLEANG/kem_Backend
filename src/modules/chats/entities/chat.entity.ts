@@ -18,6 +18,8 @@ export class Chat {
     @ManyToOne(()=>User , (user)=>user.receiver)
     receiver:User;
 
+    // @OneToMany(()=>Image ,(image)=>image.chat_id)
+    // chat_image:Image[];
 
     
 

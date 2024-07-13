@@ -1,17 +1,18 @@
 import { BadRequestException, ForbiddenException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateAuthDto } from '../dto/create-auth.dto';
+import { UpdateAuthDto } from '../dto/update-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NumericType, Repository } from 'typeorm';
-import { Otp } from './entities/otp.entity';
+import { Otp } from '../entities/otp.entity';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/services/users.service';
-import { CreateUserDto } from '../users/dto/create-user.dto';
-import { User } from '../users/entities/user.entity';
-import { Auth } from './entities/auth.entity';
-import { SignInDto } from './dto/signin.dto';
+import { UsersService } from '../../users/services/users.service';
+import { CreateUserDto } from '../../users/dto/create-user.dto';
+import { User } from '../../users/entities/user.entity';
+import { Auth } from '../entities/auth.entity';
+import { SignInDto } from '../dto/signin.dto';
+// import { TwilioService } from './twilio.service';
 // import { SignIn, SignInDto } from './dto/signin.dto';
 
 
@@ -23,7 +24,8 @@ export class AuthService {
   @InjectRepository(User) private userRepository:Repository<User>,
   private configService: ConfigService,
   private jwtService: JwtService,
-  private readonly usersService: UsersService
+  private readonly usersService: UsersService,
+  // private readonly twilioService: TwilioService
 ){}
 
 // get Token 
@@ -71,19 +73,20 @@ export class AuthService {
 
 
   //send Otp 
-  async sendOtp (username:string , type:string , otp:string){
+  // async sendOtp (username:string , type:string , otp:string){
 
-    await this.saveOTP
-
-
-
-  }
+  //   await this.saveOTP
 
 
-  async getTokens(userId: number, username: string) {
+
+  // }
+
+
+  async getTokens(userId: number, username: string,role:string) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
+          role,
           sub: userId,
           username,
         },
@@ -94,6 +97,7 @@ export class AuthService {
       ),
       this.jwtService.signAsync(
         {
+          role,
           sub: userId,
           username,
         },
@@ -113,6 +117,8 @@ export class AuthService {
   async register(registerDto:CreateUserDto){
     // const [phone_number] = registerDto.phone_number;
     const existedUser = await this.usersService.existedUser(registerDto.email , registerDto.username, registerDto.phone_number)
+    console.log(existedUser);
+    
     try {
       if(!existedUser) {
         const newUser = new User();
@@ -124,12 +130,19 @@ export class AuthService {
         newUser.password =  registerDto.password
         newUser.location = registerDto.location
         newUser.email = registerDto.email
+        newUser.role=registerDto.role
         newUser.dob = registerDto.dob
+        newUser.create_at = new Date()
         console.log(newUser);
         // validate otp
         await this.userRepository.save(newUser);
-        const token = await this.getTokens(newUser.id, newUser.username);
+
+        
+        //save refresh token
+        const token = await this.getTokens(newUser.id, newUser.username , newUser.role);
         await this.saveRefreshToken(newUser.id ,newUser.username)
+        console.log(token);
+        
             console.log(newUser);
             return {
                 message: `${newUser.username}, register is successful`,
@@ -168,28 +181,34 @@ export class AuthService {
     const isAuth = await this.authRepository.findOne({where:{user:user}});
     // if(isAuth.user.id !== user.id)
     isAuth.refresh_token = hashRefreshToken 
-    console.log(isAuth);
+    // console.log(isAuth);
     
     await this.authRepository.save(isAuth);
 
   }
+
+
+
   //login
   async signIn(signInDto:SignInDto ){
     const user = await this.usersService.validateUser(signInDto.inputvalue ,signInDto.type);
-    console.log(user);
+    // console.log(user);
     
     if(!user) throw new BadRequestException('User does not exist');
     if(!await user.validatePassword(signInDto.password)){
       throw new BadRequestException('Password is incorrect')
     }
-    console.log(signInDto);
+    // console.log(signInDto);
     
-    const tokens = await this.getTokens(user.id,user.username)
+    const tokens = await this.getTokens(user.id,user.username,user.role)
     // await this.updateRefreshToken(user.id,tokens.refreshToken);
     await this.UpdateRefreshToken(user.id,tokens.refreshToken);
     return tokens;
   }
   
+
+
+
   //log out
   async logout(user_id:number ){
     // return await this.authRepository.update(user_id,{refresh_token:null})
@@ -207,7 +226,7 @@ export class AuthService {
       const refreshTokenMatch = await bcrypt.compare(refreshtoken,isValid.refresh_token)
     if(!refreshTokenMatch)throw new ForbiddenException('Access Denied');
 
-    const tokens = await this.getTokens(isUser.id,isUser.username);
+    const tokens = await this.getTokens(isUser.id,isUser.username,isUser.role);
     // await this.updateRefreshToken(isUser.id, tokens.refreshToken);
     await this.UpdateRefreshToken(isUser.id, tokens.refreshToken);
     return tokens;
@@ -216,27 +235,5 @@ export class AuthService {
   
 }
 
-//   async sendSMSOtp(phone_number:string , message){
-//     try {
-//       if(phone())
-//     } catch (error) {
-      
-//     }
-// }
-
-  
-
-
-
-  
-  //Login // need validate Otp 
-
-  //register after validate Otp, then delete Otp 
-  
-
-  //logout to delete refresh token
-  
-  
-  //Forget Password
 
 

@@ -52,6 +52,8 @@ export class Post {
     //Report
     @OneToMany(()=>Report, (report)=>report.user)
     report:Report[];
+
+
     
 
 

@@ -8,7 +8,8 @@ export class AdminUpdateAccountDto{
     password :string; 
     dob:Date;
     role:Role;
-
+    email:string;
+    phone_number:string;
 
 
 
