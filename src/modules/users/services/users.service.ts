@@ -190,5 +190,14 @@ async changePassword(userId: number, changePasswordDto: ChangePassword){
             
     //     }
     // }
+    async findUser(userid:number){
+        const user = await this.userRepository.findOne({
+            where:{id:userid},
+            relations:{post:true},
+            
+        })
 
+        delete user.password;
+        return user;
+    }
 }

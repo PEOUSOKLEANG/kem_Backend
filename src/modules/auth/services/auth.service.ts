@@ -213,6 +213,10 @@ export class AuthService {
   async logout(user_id:number ){
     // return await this.authRepository.update(user_id,{refresh_token:null})
     await this.authRepository.update(user_id,{refresh_token:null})
+    return{
+      statusCode:HttpStatus.OK,
+      message:`User is logout`
+    };
 
   }
 
