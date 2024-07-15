@@ -11,6 +11,7 @@ import { argon2d } from "argon2";
 import { Auth } from "src/modules/auth/entities/auth.entity";
 import { Chat } from "src/modules/chats/entities/chat.entity";
 import { ProImage } from "src/modules/profileimage/entities/profileimage.entity";
+import { Role } from "./role.entity";
 
 
 export enum Gender{
@@ -19,11 +20,11 @@ export enum Gender{
     Other = 'other'
 
 }
-export enum Role{
-    Admin = 'admin',
-    User = 'user',
-    Guess= 'guess'
-}
+// export enum Role{
+//     Admin = 'admin',
+//     User = 'user',
+//     Guess= 'guess'
+// }
 @Entity({name:'users'})
 export class User {
     @PrimaryGeneratedColumn()
@@ -42,8 +43,12 @@ export class User {
     @Column({nullable:true,})
     email:string;
 
-    @Column({nullable:false , type:'enum', enum:Role})
-    role:string;
+    // @Column({nullable:false , type:'enum', enum:Role})
+    // role:string;
+
+    //role
+    @ManyToOne(() => Role, (role) => role.id,{cascade:true})
+    role: Role;
 
     @Column({nullable:false })
     password:string;

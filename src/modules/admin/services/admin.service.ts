@@ -27,7 +27,7 @@ export class AdminService {
       const user = new User();
       
        user.username = givenAccountDto.username
-       user.role  = givenAccountDto.role
+      //  user  = givenAccountDto.role
        user.password = givenAccountDto.password
        user.create_at = new Date();
        user.phone_number= givenAccountDto.phone_number

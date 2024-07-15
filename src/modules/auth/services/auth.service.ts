@@ -12,6 +12,7 @@ import { CreateUserDto } from '../../users/dto/create-user.dto';
 import { User } from '../../users/entities/user.entity';
 import { Auth } from '../entities/auth.entity';
 import { SignInDto } from '../dto/signin.dto';
+import { Role } from 'src/modules/users/entities/role.entity';
 // import { TwilioService } from './twilio.service';
 // import { SignIn, SignInDto } from './dto/signin.dto';
 
@@ -22,6 +23,7 @@ export class AuthService {
   @InjectRepository(Otp) private otpRepository:Repository<Otp>,
   @InjectRepository(Auth) private authRepository:Repository<Auth>,
   @InjectRepository(User) private userRepository:Repository<User>,
+  @InjectRepository(Role) private roleRepository:Repository<Role>,
   private configService: ConfigService,
   private jwtService: JwtService,
   private readonly usersService: UsersService,
@@ -82,7 +84,7 @@ export class AuthService {
   // }
 
 
-  async getTokens(userId: number, username: string,role:string) {
+  async getTokens(userId: number, username: string,role:any) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
@@ -113,7 +115,9 @@ export class AuthService {
       refreshToken,
     };
   }
-  // register 
+
+
+  // * sregister 
   async register(registerDto:CreateUserDto){
     // const [phone_number] = registerDto.phone_number;
     const existedUser = await this.usersService.existedUser(registerDto.email , registerDto.username, registerDto.phone_number)
@@ -121,6 +125,8 @@ export class AuthService {
     
     try {
       if(!existedUser) {
+        var role = new Role();
+         role = await this.roleRepository.findOne({where: {name: "user"}, select: {id: true}});
         const newUser = new User();
         newUser.username = registerDto.username
         newUser.firstname = registerDto.firstname
@@ -130,20 +136,25 @@ export class AuthService {
         newUser.password =  registerDto.password
         newUser.location = registerDto.location
         newUser.email = registerDto.email
-        newUser.role=registerDto.role
+        // newUser.role=registerDto.role
+        newUser.role = role;
         newUser.dob = registerDto.dob
         newUser.create_at = new Date()
-        console.log(newUser);
+        console.log('User:', newUser);
         // validate otp
         await this.userRepository.save(newUser);
+        console.log(newUser);
+        
 
         
         //save refresh token
         const token = await this.getTokens(newUser.id, newUser.username , newUser.role);
+        // console.log(n);
+        
         await this.saveRefreshToken(newUser.id ,newUser.username)
         console.log(token);
         
-            console.log(newUser);
+            // console.log(newUser);
             return {
                 message: `${newUser.username}, register is successful`,
                 statusCode: HttpStatus.OK,

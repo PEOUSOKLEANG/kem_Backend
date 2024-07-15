@@ -1,9 +1,9 @@
-import { Role } from "src/common/enum/role.enum";
+import { ERole } from "src/common/enum/role.enum";
 
 
 export class GivenAccountDto{
     username :string;
-    role:Role;
+    role:ERole;
     phone_number:string;
     password:string;
 }

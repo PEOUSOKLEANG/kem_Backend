@@ -1,4 +1,3 @@
-import { Role } from "../entities/user.entity";
 
 export class UpdateUserInfo {
     username:string;
@@ -9,5 +8,5 @@ export class UpdateUserInfo {
     phone_number:string;
     dob:Date;
     location:string;
-    role:Role;
+    role:any;
 }

@@ -1,4 +1,4 @@
-import { Role } from "src/common/enum/role.enum";
+import { ERole } from "src/common/enum/role.enum";
 
 export class AdminUpdateAccountDto{
     user_id:number;
@@ -7,7 +7,7 @@ export class AdminUpdateAccountDto{
     lastname: string;
     password :string; 
     dob:Date;
-    role:Role;
+    role:ERole;
     email:string;
     phone_number:string;
 

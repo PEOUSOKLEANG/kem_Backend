@@ -2,16 +2,21 @@ import { BadRequestException, ConflictException, HttpException, HttpStatus, Inje
 import { CreateUserDto } from '../dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { RegisterRespone } from 'src/modules/types';
 import { UpdateUserInfo } from '../dto/update-user.dto';
 import { GeneralRespone } from 'src/modules/types/generalRespone';
 import { error } from 'console';
 import { ChangePassword } from '../dto/chanegpassword.dto';
+import { Role } from '../entities/role.entity';
+import { CreateRoleDto } from '../dto/role.dto';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User) private userRepository:Repository<User>){}
+    constructor(
+        @InjectRepository(User) private userRepository:Repository<User>,
+        @InjectRepository(Role) private roleRepository:Repository<Role>
+){}
 
 // existed User  
 async existedUser (email:string ,username:string,phone_number:string ){
@@ -91,45 +96,6 @@ async changePassword(userId: number, changePasswordDto: ChangePassword){
 
 
 
-// async saveNewUser(registerDto:CreateUserDto):Promise<User>{
-//     await this.userRepository.save(registerDto);
-// }
-
-// register 
-    // async registerNewUser(registerDto:CreateUserDto):Promise<RegisterRespone>{
-    //     const [phone_number] = registerDto.phone_number;
-    //     const existedUser = await this.userRepository.findOne({where:{phone_number}})
-
-    //     try { 
-    //         if(!existedUser) {
-    //             const newUser = new User();
-    //             newUser.username = registerDto.username
-    //             newUser.firstname = registerDto.firstname
-    //             newUser.lastname = registerDto.lastname
-    //             newUser.gender = registerDto.gender
-    //             newUser.phone_number = registerDto.phone_number
-    //             newUser.password =  registerDto.password
-    //             newUser.location = registerDto.location
-    //             newUser.email = registerDto.email
-    //             newUser.dob = registerDto.dob
-    //             console.log(newUser);
-    //             await this.userRepository.save(newUser);
-    //                 console.log(newUser);
-    //                 return {
-    //                     message: `${newUser.username} is Created, successful`,
-    //                     statusCode: HttpStatus.OK,
-    //                 }
-    //             }    
-    //         else if(existedUser) throw Error;
-    //     } catch (error) {
-    //         throw new HttpException({
-    //             status:HttpStatus.BAD_REQUEST,
-    //             message:'User with this Phone number already exists'
-    //         },HttpStatus.BAD_REQUEST)
-            
-    //     }
-
-    // }
 
 
     //update info
@@ -157,7 +123,7 @@ async changePassword(userId: number, changePasswordDto: ChangePassword){
                 isUser.location = updateUserInfoDto.location
                 isUser.email = updateUserInfoDto.email
                 isUser.phone_number = updateUserInfoDto.phone_number
-                isUser.role = updateUserInfoDto.role
+                // isUser.role = updateUserInfoDto.role
 
                 console.log(isUser);
 
@@ -180,24 +146,24 @@ async changePassword(userId: number, changePasswordDto: ChangePassword){
             
         }
     }
-
-    
-    // async UserExisted(phone_number:string){
-    //     await this.userRepository.findOne({where:{phone_number}})
-    //     try {
-        
-    //     } catch (error) {
-            
-    //     }
-    // }
     async findUser(userid:number){
         const user = await this.userRepository.findOne({
             where:{id:userid},
-            relations:{post:true},
+            relations:{post:true,role:true},
             
         })
 
         delete user.password;
         return user;
     }
+    // create Role
+//    async createRole(name:string){
+//     const role: DeepPartial<Role> = { name: name };
+//     return await this.roleRepository.save(role);
+//    }
+
+    async create(createRoleDto: CreateRoleDto): Promise<Role> {
+    const role: DeepPartial<Role> = { name: createRoleDto.name };
+    return await this.roleRepository.save(role);
+  }
 }

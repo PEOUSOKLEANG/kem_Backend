@@ -49,12 +49,5 @@ export class AuthsController{
   }
 
 
-  //refresh token
-  
-
-  // @Post('send-code')
-  // async sendVerificationCode(@Body('phoneNumber') phoneNumber: string) {
-  //   await this.authsService.sendVerificationCode(phoneNumber);
-  //   return { message: 'Verification code sent' };
-  // }
+ 
 }

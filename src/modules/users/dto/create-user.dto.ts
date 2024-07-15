@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString,MinLength } from "class-validator";
-import { Role } from "src/common/enum/role.enum";
+import { ERole } from "src/common/enum/role.enum";
 
 export enum GenderDto{
     Male='male',
@@ -33,7 +33,7 @@ export class CreateUserDto {
     
     gender:GenderDto;
 
-    role:Role;
+    // role:any;
 
 
 }

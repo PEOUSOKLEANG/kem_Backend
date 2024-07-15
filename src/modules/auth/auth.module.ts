@@ -14,11 +14,12 @@ import { ConfigService } from '@nestjs/config';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { EmailService } from './services/email.service';
 import { OtpService } from './services/otp.service';
+import { Role } from '../users/entities/role.entity';
 // import { TwilioService } from './services/twilio.service';
 
 @Module({
   imports:[
-    TypeOrmModule.forFeature([Otp,User,Auth]),
+    TypeOrmModule.forFeature([Otp,User,Auth, Role]),
     JwtModule.register({}),
     UsersModule,
 

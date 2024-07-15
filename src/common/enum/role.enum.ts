@@ -1,5 +1,5 @@
-export enum Role{
+export enum ERole{
     Admin = 'admin' , 
     User = 'user' ,
-    Guess = 'guess'
+    Guess = 'guest'
 }3
