@@ -67,21 +67,21 @@ export class AppController {
   //////post
 
   //create post 
-  @Post('post/create')
-  async createPost(@Body() createPostDto:CreatePostDto){
-    console.log(createPostDto);
+  // @Post('post/create')
+  // async createPost(@Body() createPostDto:CreatePostDto){
+  //   console.log(createPostDto);
     
-    return await this.postsService.createPost(createPostDto)
-  }
+  //   return await this.postsService.createPost(createPostDto)
+  // }
 
-  //update post 
+  // //update post 
 
-  @Patch('post/edit')
-  async editPost(@Body() editPost:UpdatePostDto ){
-    console.log(editPost.postId);
+  // @Patch('post/edit')
+  // async editPost(@Body() editPost:UpdatePostDto ){
+  //   console.log(editPost.postId);
     
-    return await this.postsService.updatePost(editPost);
-  }
+  //   return await this.postsService.updatePost(editPost);
+  // }
 
   //remove post 
   @Delete('post/delete/:post_id')

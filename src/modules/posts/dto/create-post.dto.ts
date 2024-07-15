@@ -1,17 +1,21 @@
-export enum KEY_POST {
-    Farmer = 'farmer',
-    Invention = 'invention',
-    Plantfruit ='plantfruit',
-    Gardener = 'gardener'
-}
+
 export class CreatePostDto {
-    user:number;
-    // date:Date;
-    key_post:KEY_POST;
+   
     location:string;
     description:string; 
+    contact:string;
+    categories:string;
+    fb_link:string;
+    tele_link:string;
+    fb_link_active:boolean;
+    tele_link_active:boolean;
+    // update_date:Date;
+
+    // file upload
     post_file?:string;
-    update_date:Date;
+
+
+
 
 
 

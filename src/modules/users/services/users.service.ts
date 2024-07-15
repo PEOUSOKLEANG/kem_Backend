@@ -131,6 +131,7 @@ async changePassword(userId: number, changePasswordDto: ChangePassword){
 
                 
             return {
+                data:isUser,
                 message:'successful',
                 statusCode:HttpStatus.OK
             }

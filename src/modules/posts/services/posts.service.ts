@@ -14,22 +14,28 @@ export class PostsService {
     @InjectRepository(User) private userRepository:Repository<User>
   ){}
 
-  async createPost(createPostDto:CreatePostDto):Promise<GeneralRespone>{
+  async createPost(createPostDto:CreatePostDto , sub:number):Promise<GeneralRespone>{
     const post = new Post();
 
-    post.user = await this.userRepository.findOne({where:{id:createPostDto.user}})
-    post.key_post = createPostDto.key_post
+    post.user = await this.userRepository.findOne({where:{id:sub}})
     post.location = createPostDto.location
     post.post_date = new Date()
+    post.contact = createPostDto.contact
+    post.categories = createPostDto.categories
+    post.fb_link = createPostDto.fb_link
+    post.tele_link = createPostDto.tele_link
+    post.fb_link_active =createPostDto.fb_link_active
+    post.tele_link_active= createPostDto.tele_link_active
     post.post_file = createPostDto.post_file
     post.description = createPostDto.description
     console.log(post);
     
     await this.postRepository.save(post);
-
     return {
+      data:post,
       message:'Successful',
-      statusCode:HttpStatus.OK
+      statusCode:HttpStatus.OK,
+      
     }
 
 
@@ -51,9 +57,11 @@ export class PostsService {
   //     }
   //   }
   // }
-  async deletePost(post_id:number, user_id:number) {
+  async deletePost(post_id:number, sub:number) {
+    console.log('logS2',sub);
+    
     const isUser = await this.userRepository.findOne({
-      where:{id:user_id}
+      where:{id:sub}
     });
 
     if (!isUser) throw new NotFoundException('User not found')
@@ -64,11 +72,6 @@ export class PostsService {
 
     if(!isPost) throw new NotFoundException('Post not found');
     console.log(isPost ,isUser);
-
-
-
-
-      
     if(isPost.user.id !== isUser.id) throw new UnauthorizedException('User is not the owner of this post');
 
 
@@ -87,11 +90,11 @@ export class PostsService {
   }
 
 //update Post
-  async updatePost (updatePostDto: UpdatePostDto){
-    console.log(updatePostDto.user);
+  async updatePost (updatePostDto: UpdatePostDto,sub:number){
+    // console.log(updatePostDto.user);
     // Retrieve the user
     var user = await this.userRepository.findOne({
-      where:{id:updatePostDto.user}
+      where:{id:sub}
     });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -113,9 +116,16 @@ export class PostsService {
     // console.log("----------> Hello ");
     
     console.log(post);
-     post.key_post = updatePostDto.key_post
      post.description = updatePostDto.description
      post.location = updatePostDto.location
+     post.contact = updatePostDto.contact
+     post.categories= updatePostDto.categories
+     post.categories = updatePostDto.categories
+     post.fb_link = updatePostDto.fb_link
+     post.tele_link = updatePostDto.tele_link
+     post.fb_link_active =updatePostDto.fb_link_active
+     post.tele_link_active= updatePostDto.tele_link_active
+    //  post.post_file = updatePostDto.post_file
      await this.postRepository.save(post);
 
     return{

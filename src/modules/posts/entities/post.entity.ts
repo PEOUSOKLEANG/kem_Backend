@@ -4,38 +4,53 @@ import { Share } from "src/modules/shares/entities/share.entity";
 import { User } from "src/modules/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-export enum KeyPost{
-    Farmer = 'farmer',
-    Invention = 'invention',
-    Plantfruit ='plantfruit',
-    Gardener = 'gardener'
-
+export enum Active{
+    TRUE='true',
+    FALSE='false'
 }
-
 @Entity({name:'post'})
 export class Post {
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column({nullable:false,type:'enum',enum:KeyPost , default:KeyPost.Farmer})
-    key_post:string;
-
-
-    @Column({ type: 'date', nullable: true, default: () => 'CURRENT_DATE' })
-    post_date: Date;
-
     @Column({nullable:true})
     location:string;
+
+    // new add contact start 
+    @Column({nullable:true})
+    contact:string; //phone number
+
+    @Column({nullable:true})
+    categories:string;
+
+    @Column({nullable:true})
+    tele_link:string;
+
+    @Column({nullable:true})
+    fb_link:string
+
+        //link make the post look good
+    @Column({type:'enum',enum:Active , default:Active.FALSE})
+    fb_link_active:boolean;
+        //link active boolean 
+    @Column({type:'enum',enum:Active , default:Active.FALSE})
+    tele_link_active:boolean;
+
+
+    // new add contact start 
 
     @Column({nullable:true})
     post_file:string;
 
-    @UpdateDateColumn({nullable:true})
-    update_date:Date;
-
     @Column({nullable:true})
     description:string;
 
+
+    @UpdateDateColumn({nullable:true})
+    update_date:Date;
+
+    @Column({ type: 'date', nullable: true, default: () => 'CURRENT_DATE' })
+    post_date: Date;
     //share
     @OneToMany(()=> Share,(share)=>share.post)
     share:Share[];

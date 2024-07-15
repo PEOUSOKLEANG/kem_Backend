@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
   Req,
 } from '@nestjs/common';
@@ -14,11 +13,11 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserInfo } from '../dto/update-user.dto';
 import { ChangePassword } from '../dto/chanegpassword.dto';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
-import { Roles } from 'src/common/decorators/role.decorator';
-import { ERole } from 'src/common/enum/role.enum';
 import { CreateRoleDto } from '../dto/role.dto';
 import { Role } from '../entities/role.entity';
 import { SystemRolesGuard } from 'src/common/guards/system_roles.guard';
+import { Roles } from 'src/common/decorators/role.decorator';
+import { ERole } from 'src/common/enum/role.enum';
 
 @Controller('users')
 export class UsersController {
@@ -29,6 +28,7 @@ export class UsersController {
   //   return await this.usersService.registerNewUser(registerDto);
   // }
   @UseGuards(AccessTokenGuard, SystemRolesGuard)
+  @Roles(ERole.User)
   @Get('/profile')
   async getProfile(@Req() req: any) {
     // console.log(ERole.Admin);
@@ -36,6 +36,8 @@ export class UsersController {
     return await this.usersService.findUser(req.user.sub);
   }
 
+  @UseGuards(AccessTokenGuard, SystemRolesGuard)
+  @Roles(ERole.User)
   @Patch('/update/:id')
   async updateUserInfo(
     @Param('id') id: number,
