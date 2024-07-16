@@ -18,15 +18,13 @@ import { Role } from '../entities/role.entity';
 import { SystemRolesGuard } from 'src/common/guards/system_roles.guard';
 import { Roles } from 'src/common/decorators/role.decorator';
 import { ERole } from 'src/common/enum/role.enum';
+import { ChangeUsernameDTO } from '../dto/changeUsername.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // @Post('/register')
-  // async register(@Body() registerDto:CreateUserDto){
-  //   return await this.usersService.registerNewUser(registerDto);
-  // }
+
   @UseGuards(AccessTokenGuard, SystemRolesGuard)
   @Roles(ERole.User)
   @Get('/profile')
@@ -35,28 +33,37 @@ export class UsersController {
 
     return await this.usersService.findUser(req.user.sub);
   }
+  // Change Username
+  @UseGuards(AccessTokenGuard, SystemRolesGuard)
+  @Roles(ERole.User)
+  @Patch('change/username')
+  async changeUsername(@Body() changeUsernameDto:ChangeUsernameDTO ,@Req() req:any ){
+    return await this.usersService.changeUsername(changeUsernameDto,req.user.sub)
+  }
 
   @UseGuards(AccessTokenGuard, SystemRolesGuard)
   @Roles(ERole.User)
-  @Patch('/update/:id')
+  @Patch('/update')
   async updateUserInfo(
-    @Param('id') id: number,
+    @Req() req:any,
     @Body() updateUserInfo: UpdateUserInfo,
   ) {
-    // console.log(updateUserInfo,id);
-    return await this.usersService.updateInformation(id, updateUserInfo);
+    return await this.usersService.updateInformation(req.sub.user, updateUserInfo);
   }
 
   // change password
-  @Patch('/password/change/:userId')
+  @UseGuards(AccessTokenGuard, SystemRolesGuard)
+  @Roles(ERole.User)
+  @Patch('/password/change')
   async changePassword(
     // @Body() userId: number,
-    @Param('userId') userId: number,
+    @Req() req:any ,
+    // @Param('userId') userId: number,
     @Body() changepassword: ChangePassword,
   ) {
-    console.log('me', userId);
+    // console.log('me', userId);
 
-    return await this.usersService.changePassword(userId, changepassword);
+    return await this.usersService.changePassword(req.user.sub, changepassword);
   }
 
   @Post('role')

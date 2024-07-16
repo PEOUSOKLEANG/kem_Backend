@@ -1,5 +1,5 @@
 export enum ERole{
     Admin = 'admin' , 
     User = 'user' ,
-    Guess = 'guest'
+    Guest = 'guest'
 }3

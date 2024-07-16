@@ -1,5 +1,6 @@
 import { Feedback } from "src/modules/feedbacks/entities/feedback.entity";
 import { Report } from "src/modules/reports/entities/report.entity";
+import { Save } from "src/modules/save/entities/save.entity";
 import { Share } from "src/modules/shares/entities/share.entity";
 import { User } from "src/modules/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -51,9 +52,12 @@ export class Post {
 
     @Column({ type: 'date', nullable: true, default: () => 'CURRENT_DATE' })
     post_date: Date;
-    //share
+    //save
     @OneToMany(()=> Share,(share)=>share.post)
     share:Share[];
+    //share
+    @OneToMany(()=> Save,(save)=>save.post)
+    save:Save[];
 
     //user
     @ManyToOne(()=>User,(user)=>user.post)

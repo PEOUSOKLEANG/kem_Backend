@@ -28,8 +28,8 @@ export class AuthsController{
 
   // login 
   // @UseGuards(AccessTokenGuard)
-  @Post('signin')
-  async signIn (@Body() signInDto:SignInDto ){
+  @Post('login')
+  async login (@Body() signInDto:SignInDto ){
     console.log(signInDto);
     return await this.authsService.signIn(signInDto);
   }

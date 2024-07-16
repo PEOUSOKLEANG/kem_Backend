@@ -1,15 +1,13 @@
 import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { DeepPartial, Repository } from 'typeorm';
-import { RegisterRespone } from 'src/modules/types';
 import { UpdateUserInfo } from '../dto/update-user.dto';
 import { GeneralRespone } from 'src/modules/types/generalRespone';
-import { error } from 'console';
 import { ChangePassword } from '../dto/chanegpassword.dto';
 import { Role } from '../entities/role.entity';
 import { CreateRoleDto } from '../dto/role.dto';
+import { ChangeUsernameDTO } from '../dto/changeUsername.dto';
 
 @Injectable()
 export class UsersService {
@@ -166,5 +164,17 @@ async changePassword(userId: number, changePasswordDto: ChangePassword){
     async create(createRoleDto: CreateRoleDto): Promise<Role> {
     const role: DeepPartial<Role> = { name: createRoleDto.name };
     return await this.roleRepository.save(role);
+  }
+
+  //changUsername
+  async changeUsername(changeUsername:ChangeUsernameDTO ,sub:number){
+    const user = await this.userRepository.findOne({where:{id:sub}});
+    user.username = changeUsername.username
+    await this.userRepository.save(user);
+    return {
+        message:`username is changed`,
+        statusCode:HttpStatus.OK
+    }
+
   }
 }

@@ -1,11 +1,8 @@
+import { Report_Status } from "src/common/enum/report_status.enum";
 import { Post } from "src/modules/posts/entities/post.entity";
 import { User } from "src/modules/users/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-export enum Report_Status{
-    Post_Is_Out_Content='post_is_out_content',
-    
-    
-}
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
 
 @Entity({name:'reports'})
 export class Report {
@@ -14,6 +11,9 @@ export class Report {
 
     @Column({type:'enum', enum:Report_Status})
     report_status:string;
+
+    @CreateDateColumn({})
+    report_date:Date;
 
     //userid
     @ManyToOne(()=>User,(user)=>user.report)

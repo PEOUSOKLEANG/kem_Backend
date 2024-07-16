@@ -1,8 +1,7 @@
-export enum Report_Status{
-    Post_Is_Out_Content='post_is_out_content',
-}
+import { Report_Status } from "src/common/enum/report_status.enum";
+
 export class CreateReportDto {
     report_status:Report_Status;
-    reporter_id:any;
+
     post_id:any;
 }

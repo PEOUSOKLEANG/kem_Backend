@@ -4,6 +4,8 @@ import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { SystemRolesGuard } from 'src/common/guards/system_roles.guard';
+import { Roles } from 'src/common/decorators/role.decorator';
+import { ERole } from 'src/common/enum/role.enum';
 
 @Controller('posts')
 export class PostsController {
@@ -19,6 +21,7 @@ export class PostsController {
   
   // //update post 
   @UseGuards(AccessTokenGuard, SystemRolesGuard)
+  @Roles(ERole.Admin , ERole.User)
   @Patch('post/edit')
   async editPost(@Body() editPost:UpdatePostDto, @Req() req:any){
     // console.log(editPost.postId);
@@ -28,6 +31,7 @@ export class PostsController {
 
 
   @UseGuards(AccessTokenGuard, SystemRolesGuard)
+  @Roles(ERole.Admin , ERole.User)
   @Delete('delete/:post_id')
   async deletePost(
     @Req() req:any,
@@ -42,5 +46,14 @@ export class PostsController {
     // return await this.postsService.deletePost(post_id ,userid) ** be care with is prop 
     //exmaple if two value of is not objet it can be confuse
   }
-  // get all post  
+  // get all post
+  @UseGuards(SystemRolesGuard)
+  @Roles(ERole.Guest)
+  @Get('/guest') 
+  async getAllPost (){
+    return await this.getAllPost()
+  }
+
+  // Guest viewPost 
+
 }

@@ -133,58 +133,16 @@ export class PostsService {
       statusCode:HttpStatus.OK,
       post:post 
     }
-
-
-    
-
-    
-    // if( post){
-    //  post.key_post = updatePostDto.key_post
-    //  post.description = updatePostDto.description
-    //  post.location = updatePostDto.location
-    //  await this.postRepository.save(post);
-
-    //  console.log(post);
-     
-    // return{
-    //   message:'post is updated',
-    //   statusCode:HttpStatus.OK,
-    //   post:post 
-    // }
-    // }
   }
 
-  // async updatePost(user_id: number, post_id: number, updateData: Partial<Post>): Promise<Post> {
-  //   // Retrieve the post
-  //   const post = await this.postRepository.findOne(post_id, { relations: ['user'] });
-  //   if (!post) {
-  //     throw new NotFoundException('Post not found');
-  //   }
-
-  //   // Retrieve the user
-  //   const user = await this.userRepository.findOne(user_id);
-  //   if (!user) {
-  //     throw new NotFoundException('User not found');
-  //   }
-
-  //   // Check ownership
-  //   if (post.user.id !== user.id) {
-  //     throw new UnauthorizedException('User is not the owner of this post');
-  //   }
-
-  //   // Update the post
-  //   Object.assign(post, updateData);
-  //   const updatedPost = await this.postRepository.save(post);
-  //   return updatedPost;
-  // }
-
-  // validate Post
+  
+  
  
 
 //  random post 
 
 
-// get all post 
+// get all post for guest 
 async getPost(){
   return  await this.postRepository.find();
 }

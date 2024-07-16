@@ -94,10 +94,10 @@ export class AppController {
 
   /////Report
    // report post 
-  @Post('report/post')
-  async createReport(@Body() createReport:CreateReportDto){
-   return await this.reportsService.CreateReport(createReport);
-  }
+  // @Post('report/post')
+  // async createReport(@Body() createReport:CreateReportDto){
+  //  return await this.reportsService.CreateReport(createReport);
+  // }
 
 
   // report post 

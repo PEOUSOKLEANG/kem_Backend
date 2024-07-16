@@ -15,6 +15,8 @@ import { AdminModule } from './modules/admin/admin.module';
 import { ChatimageModule } from './modules/chatimage/chatimage.module';
 import { ProfileimageModule } from './modules/profileimage/profileimage.module';
 import { PostimageModule } from './modules/postimage/postimage.module';
+import { SaveModule } from './modules/save/save.module';
+import { UploadModule } from './modules/upload/upload.module';
 import OtpEmailConfig from './config/OtpEmailConfig';
 
 @Module({
@@ -40,7 +42,7 @@ import OtpEmailConfig from './config/OtpEmailConfig';
 
   }), PostsModule, FeedbacksModule, ReportsModule, SharesModule, 
   UsersModule, AuthModule, ChatsModule, AdminModule, 
-  ChatimageModule, ProfileimageModule, PostimageModule],
+  ChatimageModule, ProfileimageModule, PostimageModule, SaveModule, UploadModule],
   controllers: [AppController],
   providers: [AppService],
 })

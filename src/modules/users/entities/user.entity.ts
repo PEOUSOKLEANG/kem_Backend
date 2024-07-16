@@ -12,6 +12,7 @@ import { Auth } from "src/modules/auth/entities/auth.entity";
 import { Chat } from "src/modules/chats/entities/chat.entity";
 import { ProImage } from "src/modules/profileimage/entities/profileimage.entity";
 import { Role } from "./role.entity";
+import { Save } from "src/modules/save/entities/save.entity";
 
 
 export enum Gender{
@@ -64,8 +65,6 @@ export class User {
     @Column({nullable:true})
     location:string;
 
-    
-
     @Column({unique:true , nullable:true})
     private_key:string;
 
@@ -87,6 +86,10 @@ export class User {
     //post 
     @OneToMany(()=>Post,(post)=>post.user)
     post:Post[];
+
+    //save 
+    @OneToMany(()=>Save,(save)=>save.user)
+    save:Save[];
     
 
     //report
